@@ -12,7 +12,7 @@ var finalString string
 
 var stringLength int
 
-// Gets a letter from channel and puts into fila string
+// Gets a letter from channel and puts into final string
 func addToFinalStack(letterChannel chan string, wg *sync.WaitGroup) {
 	// get a letter from channel
 	letter := <-letterChannel
@@ -47,9 +47,10 @@ func main() {
 	runtime.GOMAXPROCS(2)
 	var wg sync.WaitGroup
 
-	initialString = "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal."
+	initialString = "Today the most civilized countries of the world spend a maximum of their income on war and a minimum on education. The twenty-first century will reverse this order. It will be more glorious to fight against ignorance than to die on the field of battle. The discovery of a new scientific truth will be more important than the squabbles of diplomats. Even the newspapers of our own day are beginning to treat scientific discoveries and the creation of fresh philosophical concepts as news. The newspapers of the twenty-first century will give a mere 'stick' in the back pages to accounts of crime or political controversies, but will headline on the front pages the proclamation of a new scientific hypothesis.Progress along such lines will be impossible while nations persist in the savage practice of killing each other off. I inherited from my father, an erudite man who labored hard for peace, an ineradicable hatred of war."
 	initialBytes := []byte(initialString)
 
+	// 2)
 	var letterChannel chan string = make(chan string)
 
 	stringLength = len(initialBytes)
@@ -57,7 +58,9 @@ func main() {
 	for i := 0; i < stringLength; i++ {
 		wg.Add(2)
 
+		// 3)
 		go capitalize(letterChannel, string(initialBytes[i]), &wg)
+		// 4)
 		go addToFinalStack(letterChannel, &wg)
 
 		wg.Wait()
